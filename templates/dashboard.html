@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Token System - Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f7f5fc;
+            color: #30284a;
+        }
+
+        header {
+            background: #8070b5;
+            color: white;
+            padding: 22px 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        header h2 {
+            margin: 0;
+        }
+
+        header a {
+            color: #6d5aa6;
+            text-decoration: none;
+            background: #ffffff;
+            padding: 10px 16px;
+            border-radius: 7px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        header a:hover {
+            background: #eee9fa;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .welcome {
+            margin-bottom: 28px;
+        }
+
+        .welcome h1 {
+            margin-bottom: 8px;
+            color: #30284a;
+        }
+
+        .welcome p {
+            color: #827a96;
+            line-height: 1.5;
+        }
+
+        .modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 22px;
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(72, 55, 112, 0.07);
+            border-top: 4px solid #8070b5;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(72, 55, 112, 0.13);
+        }
+
+        .card .icon {
+            font-size: 32px;
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            color: #30284a;
+        }
+
+        .card p {
+            color: #827a96;
+            min-height: 40px;
+            line-height: 1.5;
+        }
+
+        .card a {
+            display: inline-block;
+            background: #8070b5;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .card a:hover {
+            background: #6d5aa6;
+        }
+
+        /* Token card uses the same lavender theme */
+
+        .token-card {
+            border-top-color: #6d5aa6;
+        }
+
+        .token-card a {
+            background: #6d5aa6;
+        }
+
+        .token-card a:hover {
+            background: #58468f;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 18px;
+            }
+
+            .container {
+                margin: 24px auto;
+                padding: 0 15px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>🏥 Smart Token System</h2>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</header>
+
+<div class="container">
+
+    <div class="welcome">
+        <h1>Dashboard</h1>
+        <p>Welcome, {{ session.get('username', 'User') }}!</p>
+        <p>Manage appointments, doctors, patients, and tokens from one place.</p>
+    </div>
+
+    <div class="modules">
+
+        <div class="card">
+            <div class="icon"></div>
+            <h3>Appointments</h3>
+            <p>Schedule and view patient appointments.</p>
+            <a href="{{ url_for('appointments') }}">Open Appointments</a>
+        </div>
+
+        <div class="card">
+            <div class="icon"></div>
+            <h3>Doctors</h3>
+            <p>Add doctors and manage doctor information.</p>
+            <a href="{{ url_for('doctors') }}">Open Doctors</a>
+        </div>
+
+        <div class="card">
+            <div class="icon"></div>
+            <h3>Patients</h3>
+            <p>Register patients and view patient records.</p>
+            <a href="{{ url_for('patients') }}">Open Patients</a>
+        </div>
+
+        <div class="card">
+            <div class="icon"></div>
+            <h3>Token Queue</h3>
+            <p>View patients waiting for their turn.</p>
+            <a href="{{ url_for('queue') }}">Open Queue</a>
+        </div>
+
+        <div class="card">
+            <div class="icon"></div>
+            <h3>Reports</h3>
+            <p>View patient, appointment, and token statistics.</p>
+            <a href="{{ url_for('reports') }}">Open Reports</a>
+        </div>
+
+        <div class="card token-card">
+            <div class="icon"></div>
+            <h3>Token Generation</h3>
+            <p>Generate patient tokens, view token numbers, and update token status.</p>
+            <a href="{{ url_for('token') }}">Open Token </a>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

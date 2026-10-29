@@ -1,0 +1,621 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token Generation | Smart Token System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f7f5fc;
+            color: #30284a;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #8070b5, #6d5aa6);
+            color: white;
+            padding: 22px 45px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .hospital-icon {
+            width: 48px;
+            height: 48px;
+            background: white;
+            color: #6d5aa6;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 25px;
+        }
+
+        .header h1 {
+            font-size: 23px;
+        }
+
+        .header p {
+            font-size: 13px;
+            opacity: .9;
+            margin-top: 4px;
+        }
+
+        .dashboard-btn {
+            text-decoration: none;
+            color: #6d5aa6;
+            background: white;
+            padding: 11px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: 35px auto;
+            padding: 0 25px;
+        }
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+        .page-title h2 {
+            font-size: 28px;
+        }
+
+        .page-title p {
+            color: #827a96;
+            margin-top: 7px;
+        }
+
+        .top-section {
+            display: grid;
+            grid-template-columns: 1.2fr .8fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e8e2f2;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(72,55,110,.06);
+            min-width: 0;
+        }
+
+        .card h3 {
+            color: #6d5aa6;
+            margin-bottom: 20px;
+            font-size: 19px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 7px;
+            color: #625878;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e2dced;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+            color: #30284a;
+        }
+
+        select:focus, input:focus {
+            border-color: #8070b5;
+            outline: 2px solid #eee9fa;
+        }
+
+        button {
+            cursor: pointer;
+            font-weight: bold;
+            border: none;
+            border-radius: 7px;
+            padding: 10px 13px;
+        }
+
+        .generate-btn {
+            width: 100%;
+            background: #8070b5;
+            color: white;
+            padding: 14px;
+            font-size: 15px;
+        }
+
+        .generate-btn:hover {
+            background: #6d5aa6;
+        }
+
+        .token-info {
+            text-align: center;
+            background: #fbfaff;
+            border: 1px solid #eee9f5;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .token-icon {
+            font-size: 45px;
+            margin-bottom: 10px;
+        }
+
+        .token-info h4 {
+            color: #6d5aa6;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .token-info p {
+            color: #827a96;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .process {
+            display: flex;
+            justify-content: space-around;
+            gap: 8px;
+            margin-top: 22px;
+        }
+
+        .process-item {
+            text-align: center;
+        }
+
+        .process-number {
+            width: 35px;
+            height: 35px;
+            background: #8070b5;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: auto;
+            font-weight: bold;
+        }
+
+        .process-item p {
+            margin-top: 7px;
+            font-size: 11px;
+        }
+
+        .token-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .token-header h3 {
+            margin-bottom: 0;
+        }
+
+        .token-count {
+            background: #eee9fa;
+            color: #6d5aa6;
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        .token-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .token-table th {
+            text-align: left;
+            background: #f2eefb;
+            padding: 13px;
+            font-size: 12px;
+            color: #625878;
+            white-space: nowrap;
+        }
+
+        .token-table td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #eee9f5;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        .token-number, .patient-name, .doctor-name {
+            font-weight: bold;
+            color: #6d5aa6;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .status-waiting {
+            background: #f2eafa;
+            color: #865a9f;
+        }
+
+        .status-called {
+            background: #e5efff;
+            color: #285bb5;
+        }
+
+        .status-completed {
+            background: #e4f7e9;
+            color: #247340;
+        }
+
+        .status-cancelled {
+            background: #fdeaea;
+            color: #a12626;
+        }
+
+        .action-form {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 210px;
+        }
+
+        .action-form select {
+            min-width: 115px;
+            padding: 8px;
+            font-size: 12px;
+        }
+
+        .update-btn {
+            background: #8070b5;
+            color: white;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .update-btn:hover {
+            background: #6d5aa6;
+        }
+
+        .delete-btn {
+            background: #fdeaea;
+            color: #a12626;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        .delete-btn:hover {
+            background: #f8d5d5;
+        }
+
+        .delete-form {
+            margin-top: 5px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 35px;
+            color: #938ba5;
+            line-height: 1.8;
+        }
+
+        .message {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            font-size: 14px;
+        }
+
+        .success {
+            background: #e8f7ec;
+            color: #216e39;
+        }
+
+        .error {
+            background: #fdeaea;
+            color: #a12626;
+        }
+
+        @media (max-width: 800px) {
+            .header {
+                padding: 18px 20px;
+                gap: 12px;
+            }
+
+            .top-section {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 18px;
+            }
+
+            .dashboard-btn {
+                padding: 9px 12px;
+                font-size: 12px;
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .header {
+                padding: 16px 12px;
+            }
+
+            .header-left {
+                gap: 9px;
+            }
+
+            .hospital-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 21px;
+            }
+
+            .header h1 {
+                font-size: 16px;
+            }
+
+            .header p {
+                font-size: 11px;
+            }
+
+            .container {
+                margin: 25px auto;
+                padding: 0 14px;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            .page-title h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="hospital-icon">⚕</div>
+            <div>
+                <h1>Smart Token System</h1>
+                <p>Hospital Administration Portal</p>
+            </div>
+        </div>
+
+        <a href="/dashboard" class="dashboard-btn">← Dashboard</a>
+    </div>
+
+    <div class="container">
+        <div class="page-title">
+            <h2>Token Generation</h2>
+            <p>Generate, call and manage patient tokens.</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        <div class="top-section">
+            <div class="card">
+                <h3>🎫 Generate New Token</h3>
+
+                <form action="/token" method="POST">
+                    <div class="form-group">
+                        <label for="patient_id">Select Patient</label>
+                        <select id="patient_id" name="patient_id" required>
+                            <option value="">Select Patient</option>
+                            {% for patient in patients %}
+                                <option value="{{ patient['id'] }}">
+                                    {{ patient['name'] }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="doctor_id">Select Doctor</label>
+                        <select id="doctor_id" name="doctor_id" required>
+                            <option value="">Select Doctor</option>
+                            {% for doctor in doctors %}
+                                <option value="{{ doctor['id'] }}">
+                                    Dr. {{ doctor['name'] }}
+                                    {% if doctor['specialization'] %}
+                                        - {{ doctor['specialization'] }}
+                                    {% endif %}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="purpose">Purpose of Visit</label>
+                        <input type="text" id="purpose" name="purpose"
+                               placeholder="e.g. General check-up" required>
+                    </div>
+
+                    <button type="submit" class="generate-btn">
+                        🎫 Generate Token
+                    </button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3>💡 How Token System Works</h3>
+                <div class="token-info">
+                    <div class="token-icon">🎟️</div>
+                    <h4>Simple & Smart Queue</h4>
+                    <p>
+                        Select a patient and doctor, enter the purpose,
+                        and generate a unique consultation token.
+                    </p>
+
+                    <div class="process">
+                        <div class="process-item">
+                            <div class="process-number">1</div>
+                            <p>Select Patient</p>
+                        </div>
+                        <div class="process-item">
+                            <div class="process-number">2</div>
+                            <p>Select Doctor</p>
+                        </div>
+                        <div class="process-item">
+                            <div class="process-number">3</div>
+                            <p>Get Token</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="token-header">
+                <h3>📋 All Tokens</h3>
+                <span class="token-count">{{ tokens|length }} Tokens</span>
+            </div>
+
+            {% if tokens %}
+                <div class="table-wrap">
+                    <table class="token-table">
+                        <thead>
+                            <tr>
+                                <th>Token</th>
+                                <th>Patient</th>
+                                <th>Doctor</th>
+                                <th>Purpose</th>
+                                <th>Status</th>
+                                <th>Manage Status</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for token in tokens %}
+                                <tr>
+                                    <td>
+                                        <span class="token-number">
+                                            T{{ "%03d"|format(token['token_number']) }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="patient-name">
+                                            {{ token['patient_name'] or 'Unknown' }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="doctor-name">
+                                            {% if token['doctor_name'] %}
+                                                Dr. {{ token['doctor_name'] }}
+                                            {% else %}
+                                                Not assigned
+                                            {% endif %}
+                                        </span>
+                                    </td>
+
+                                    <td>{{ token['purpose'] or '-' }}</td>
+
+                                    <td>
+                                        <span class="status-badge
+                                            {% if token['status'] == 'Waiting' %}
+                                                status-waiting
+                                            {% elif token['status'] == 'Called' %}
+                                                status-called
+                                            {% elif token['status'] == 'Completed' %}
+                                                status-completed
+                                            {% else %}
+                                                status-cancelled
+                                            {% endif %}">
+                                            {{ token['status'] }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <form class="action-form"
+                                              action="{{ url_for('update_token_status', token_id=token['id']) }}"
+                                              method="POST">
+
+                                            <select name="status" aria-label="Choose token status">
+                                                {% for status in ['Waiting', 'Called', 'Completed', 'Cancelled'] %}
+                                                    <option value="{{ status }}"
+                                                        {% if token['status'] == status %}selected{% endif %}>
+                                                        {{ status }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+
+                                            <button type="submit" class="update-btn">
+                                                Update
+                                            </button>
+                                        </form>
+                                    </td>
+
+                                    <td>
+                                        <form class="delete-form"
+                                              action="{{ url_for('delete_token', token_id=token['id']) }}"
+                                              method="POST"
+                                              onsubmit="return confirm('Are you sure you want to delete this token? This cannot be undone.');">
+
+                                            <button type="submit" class="delete-btn">
+                                                🗑 Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty">
+                    <div style="font-size:45px;">🎫</div>
+                    <p>No tokens generated yet.</p>
+                    <p>Generate the first token using the form above.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

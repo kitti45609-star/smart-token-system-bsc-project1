@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Token System | Login</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            background: #f7f5fc;
+            color: #30284a;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 950px;
+            min-height: 530px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: #ffffff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(72, 55, 112, 0.10);
+        }
+
+        .welcome-panel {
+            background: #8070b5;
+            color: #ffffff;
+            padding: 55px 42px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-panel::before,
+        .welcome-panel::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .welcome-panel::before {
+            width: 280px;
+            height: 280px;
+            top: -100px;
+            right: -100px;
+        }
+
+        .welcome-panel::after {
+            width: 220px;
+            height: 220px;
+            bottom: -90px;
+            left: -80px;
+        }
+
+        .medical-icon {
+            width: 75px;
+            height: 75px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 18px;
+            font-size: 40px;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-panel h2 {
+            font-size: 30px;
+            line-height: 1.35;
+            margin-bottom: 16px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-panel p {
+            color: #f0ecfa;
+            font-size: 14px;
+            line-height: 1.8;
+            max-width: 330px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .features {
+            margin-top: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            margin-bottom: 17px;
+            font-size: 13px;
+            color: #ffffff;
+        }
+
+        .check {
+            width: 23px;
+            height: 23px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 50%;
+            font-size: 12px;
+        }
+
+        .form-panel {
+            padding: 55px 48px 35px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-panel h1 {
+            color: #30284a;
+            font-size: 27px;
+            margin-bottom: 9px;
+        }
+
+        .subtitle {
+            color: #827a96;
+            font-size: 14px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        label {
+            display: block;
+            color: #30284a;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 9px;
+        }
+
+        .input-group {
+            margin-bottom: 21px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            height: 47px;
+            padding: 0 14px;
+            border: 1px solid #e4deef;
+            border-radius: 7px;
+            background: #ffffff;
+            color: #30284a;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s ease;
+        }
+
+        input::placeholder {
+            color: #a39bb5;
+        }
+
+        input:focus {
+            border-color: #8070b5;
+            box-shadow: 0 0 0 3px rgba(128, 112, 181, 0.12);
+        }
+
+        .password-input {
+            padding-right: 65px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: #6d5aa6;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .login-button {
+            width: 100%;
+            height: 48px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 7px;
+            background: #8070b5;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .login-button:hover {
+            background: #6d5aa6;
+            transform: translateY(-1px);
+        }
+
+        .error-message {
+            padding: 11px 13px;
+            margin-bottom: 20px;
+            border-radius: 7px;
+            border: 1px solid #ffd0d0;
+            background: #fff1f1;
+            color: #bd3030;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 28px;
+            color: #827a96;
+            font-size: 12px;
+        }
+
+        @media (max-width: 720px) {
+            body {
+                padding: 16px;
+            }
+
+            .login-container {
+                max-width: 430px;
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+
+            .welcome-panel {
+                padding: 28px;
+                align-items: center;
+                text-align: center;
+            }
+
+            .medical-icon {
+                width: 58px;
+                height: 58px;
+                font-size: 31px;
+                border-radius: 14px;
+                margin-bottom: 15px;
+            }
+
+            .welcome-panel h2 {
+                font-size: 23px;
+                margin-bottom: 8px;
+            }
+
+            .welcome-panel p {
+                font-size: 13px;
+            }
+
+            .features {
+                display: none;
+            }
+
+            .form-panel {
+                padding: 32px 26px 27px;
+            }
+
+            .form-panel h1 {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="login-container">
+
+        <section class="welcome-panel">
+            <div class="medical-icon" aria-hidden="true">✚</div>
+
+            <h2>Smart Healthcare,<br>Better Care.</h2>
+
+            <p>
+                Manage patient tokens and queues efficiently
+                with a simpler, smarter healthcare experience.
+            </p>
+
+            <div class="features">
+                <div class="feature">
+                    <span class="check">✓</span>
+                    Easy token generation
+                </div>
+
+                <div class="feature">
+                    <span class="check">✓</span>
+                    Organized patient queues
+                </div>
+
+                <div class="feature">
+                    <span class="check">✓</span>
+                    Efficient appointment management
+                </div>
+            </div>
+        </section>
+
+        <section class="form-panel">
+            <h1>Welcome Back!</h1>
+
+            <p class="subtitle">
+                Sign in to access your Smart Token System account.
+            </p>
+
+            {% if error %}
+                <div class="error-message" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            <form action="{{ url_for('check_login') }}" method="POST">
+                <div class="input-group">
+                    <label for="username">Gmail ID</label>
+                    <input
+                        type="email"
+                        id="username"
+                        name="username"
+                        placeholder="Enter your Gmail ID"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+
+                    <div class="input-wrapper">
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="password-input"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="toggle-password"
+                            id="togglePassword"
+                        >Show</button>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-button">
+                    Sign In
+                </button>
+            </form>
+
+            <p class="footer">
+                Smart Token System &copy; 2026
+            </p>
+        </section>
+
+    </main>
+
+    <script>
+        const passwordInput = document.getElementById("password");
+        const toggleButton = document.getElementById("togglePassword");
+
+        toggleButton.addEventListener("click", function () {
+            const isHidden = passwordInput.type === "password";
+
+            passwordInput.type = isHidden ? "text" : "password";
+            toggleButton.textContent = isHidden ? "Hide" : "Show";
+        });
+    </script>
+</body>
+</html>

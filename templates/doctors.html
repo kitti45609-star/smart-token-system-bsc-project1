@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Management | Smart Token System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f7f5fc;
+            color: #30284a;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #8070b5, #6d5aa6);
+            color: white;
+            padding: 22px 45px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .hospital-icon {
+            width: 48px;
+            height: 48px;
+            background: white;
+            color: #8070b5;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 25px;
+        }
+
+        .header h1 {
+            font-size: 23px;
+        }
+
+        .header p {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        .dashboard-btn {
+            text-decoration: none;
+            color: #6d5aa6;
+            background: white;
+            padding: 11px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .dashboard-btn:hover {
+            background: #eee9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 35px auto;
+            padding: 0 25px;
+        }
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+        .page-title h2 {
+            font-size: 28px;
+        }
+
+        .page-title p {
+            color: #827a96;
+            margin-top: 7px;
+        }
+
+        .top-section {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e8e2f2;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(65, 48, 100, 0.06);
+        }
+
+        .card h3 {
+            color: #6d5aa6;
+            margin-bottom: 20px;
+            font-size: 19px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 7px;
+            color: #625878;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e2dced;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            background: #fbfaff;
+            color: #30284a;
+        }
+
+        input:focus, select:focus {
+            border-color: #8070b5;
+            box-shadow: 0 0 0 3px rgba(128, 112, 181, 0.12);
+        }
+
+        .add-btn {
+            width: 100%;
+            border: none;
+            background: #8070b5;
+            color: white;
+            padding: 13px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .add-btn:hover {
+            background: #6d5aa6;
+        }
+
+        .stats-box {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f7f5fc;
+            padding: 18px;
+            border-radius: 12px;
+            border-left: 5px solid #8070b5;
+        }
+
+        .stat-text p {
+            color: #827a96;
+            font-size: 13px;
+        }
+
+        .stat-text h4 {
+            font-size: 24px;
+            margin-top: 4px;
+            color: #6d5aa6;
+        }
+
+        .stat-icon {
+            font-size: 27px;
+        }
+
+        .doctor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 12px;
+        }
+
+        .doctor-header h3 {
+            margin-bottom: 0;
+        }
+
+        .doctor-count {
+            background: #eee9fa;
+            color: #6d5aa6;
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .doctor-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .doctor-table th {
+            text-align: left;
+            background: #f7f5fc;
+            padding: 14px;
+            font-size: 13px;
+            color: #827a96;
+        }
+
+        .doctor-table td {
+            padding: 16px 14px;
+            border-bottom: 1px solid #eee9f5;
+            font-size: 14px;
+        }
+
+        .doctor-table tbody tr:hover {
+            background: #fbfaff;
+        }
+
+        .doctor-name {
+            font-weight: bold;
+            color: #6d5aa6;
+        }
+
+        .doctor-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #eee9fa;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .available, .unavailable {
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .available {
+            background: #eee9fa;
+            color: #65509b;
+        }
+
+        .unavailable {
+            background: #f2eafa;
+            color: #865a9f;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 45px;
+            color: #938ba5;
+        }
+
+        .message {
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background: #eee9fa;
+            color: #6d5aa6;
+        }
+
+        @media (max-width: 800px) {
+            .header {
+                padding: 18px 20px;
+                gap: 15px;
+            }
+
+            .top-section {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .doctor-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .header h1 {
+                font-size: 18px;
+            }
+
+            .dashboard-btn {
+                padding: 9px 12px;
+                white-space: nowrap;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <div class="header-left">
+            <div class="hospital-icon">⚕</div>
+            <div>
+                <h1>Smart Token System</h1>
+                <p>Hospital Administration Portal</p>
+            </div>
+        </div>
+
+        <a href="/dashboard" class="dashboard-btn">← Dashboard</a>
+    </div>
+
+    <div class="container">
+
+        <div class="page-title">
+            <h2>Doctor Management</h2>
+            <p>Manage hospital doctors, specializations and availability.</p>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="top-section">
+
+            <div class="card">
+                <h3>➕ Add New Doctor</h3>
+
+                <form action="/doctors" method="POST">
+                    <div class="form-row">
+
+                        <div class="form-group">
+                            <label for="name">Doctor Name</label>
+                            <input type="text" id="name" name="name"
+                                   placeholder="Enter doctor name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="specialization">Specialization</label>
+                            <input type="text" id="specialization"
+                                   name="specialization"
+                                   placeholder="e.g. Cardiologist" required>
+                        </div>
+
+                        <div class="form-group full">
+                            <label for="availability">Availability</label>
+                            <select id="availability" name="availability" required>
+                                <option value="">Select availability</option>
+                                <option value="Available">Available</option>
+                                <option value="Unavailable">Unavailable</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="add-btn">Add Doctor</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3>📊 Doctor Overview</h3>
+
+                <div class="stats-box">
+                    <div class="stat">
+                        <div class="stat-text">
+                            <p>Total Doctors</p>
+                            <h4>{{ doctors|length }}</h4>
+                        </div>
+                        <div class="stat-icon">👨‍⚕️</div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-text">
+                            <p>Hospital Department</p>
+                            <h4>OPD</h4>
+                        </div>
+                        <div class="stat-icon">🏥</div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-text">
+                            <p>System Status</p>
+                            <h4>Active</h4>
+                        </div>
+                        <div class="stat-icon">✓</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card">
+            <div class="doctor-header">
+                <h3>👨‍⚕️ Registered Doctors</h3>
+                <span class="doctor-count">{{ doctors|length }} Doctors</span>
+            </div>
+
+            {% if doctors %}
+                <table class="doctor-table">
+                    <thead>
+                        <tr>
+                            <th>Doctor</th>
+                            <th>Specialization</th>
+                            <th>Availability</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for doctor in doctors %}
+                            <tr>
+                                <td>
+                                    <span class="doctor-avatar">👨‍⚕️</span>
+                                    <span class="doctor-name">{{ doctor["name"] }}</span>
+                                </td>
+                                <td>{{ doctor["specialization"] }}</td>
+                                <td>
+                                    {% if doctor["availability"] == "Available" %}
+                                        <span class="available">● Available</span>
+                                    {% else %}
+                                        <span class="unavailable">● Unavailable</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty">
+                    <div style="font-size:45px;">👨‍⚕️</div>
+                    <p>No doctors registered yet.</p>
+                    <p>Add your first doctor using the form above.</p>
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+</body>
+</html>

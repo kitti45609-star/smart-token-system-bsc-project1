@@ -1,0 +1,358 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Management | Smart Token System</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 25px;
+            font-family: Arial, sans-serif;
+            background: #f7f5fc;
+            color: #30284a;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        h1 { margin: 0; color: #30284a; }
+        h2 { margin-top: 0; color: #6d5aa6; }
+
+        .back, .edit {
+            text-decoration: none;
+            background: #8070b5;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 7px;
+            display: inline-block;
+        }
+
+        .back:hover, .edit:hover { background: #6d5aa6; }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid #e8e2f2;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(65, 48, 100, 0.06);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #625878;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e2dced;
+            border-radius: 7px;
+            font-size: 15px;
+            background: #fbfaff;
+            color: #30284a;
+        }
+
+        input:focus, select:focus {
+            outline: 2px solid #dcd2f0;
+            border-color: #8070b5;
+        }
+
+        button {
+            border: none;
+            padding: 10px 14px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .submit {
+            margin-top: 18px;
+            background: #8070b5;
+            color: white;
+            font-weight: bold;
+        }
+
+        .submit:hover { background: #6d5aa6; }
+
+        .edit-button {
+            background: #8070b5;
+            color: white;
+            text-decoration: none;
+            padding: 10px 14px;
+            border-radius: 7px;
+            display: inline-block;
+        }
+
+        .edit-button:hover { background: #6d5aa6; }
+
+        .delete {
+            background: #f9e7eb;
+            color: #a12f48;
+            border: 1px solid #efcbd4;
+        }
+
+        .delete:hover { background: #f3d5dd; }
+
+        .reactivate {
+            background: #e5f5eb;
+            color: #26734d;
+            border: 1px solid #c6e8d2;
+        }
+
+        .reactivate:hover { background: #d3eedc; }
+
+        .message {
+            padding: 12px;
+            border-radius: 7px;
+            margin-bottom: 15px;
+        }
+
+        .success {
+            background: #eee9fa;
+            color: #65509b;
+            border: 1px solid #dcd2f0;
+        }
+
+        .error {
+            background: #f8eafa;
+            color: #8b4f86;
+            border: 1px solid #ecd5ed;
+        }
+
+        .table-wrapper { overflow-x: auto; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        th, td {
+            padding: 13px;
+            border-bottom: 1px solid #eee9f5;
+            text-align: left;
+        }
+
+        th {
+            background: #f7f5fc;
+            color: #6d5aa6;
+        }
+
+        tbody tr:hover { background: #fbfaff; }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .actions form { margin: 0; }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .active {
+            background: #e5f5eb;
+            color: #26734d;
+        }
+
+        .inactive {
+            background: #f9e7eb;
+            color: #a12f48;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 25px;
+            color: #938ba5;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 15px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .card { padding: 18px; }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <div class="topbar">
+        <h1>Patient Management</h1>
+        <a class="back" href="/dashboard">← Dashboard</a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="message {{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <!-- Register Patient -->
+    <div class="card">
+        <h2>Register New Patient</h2>
+
+        <form method="POST" action="/patients">
+            <div class="form-grid">
+                <div>
+                    <label for="name">Patient Name *</label>
+                    <input type="text" id="name" name="name"
+                           placeholder="Enter full name"
+                           maxlength="100" required>
+                </div>
+
+                <div>
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age"
+                           placeholder="Enter age" min="0" max="130">
+                </div>
+
+                <div>
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender">
+                        <option value="">Select gender</option>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                        <option value="Other">Other</option>
+                        <option value="Prefer not to say">
+                            Prefer not to say
+                        </option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone"
+                           placeholder="Enter phone number"
+                           maxlength="20">
+                </div>
+            </div>
+
+            <button type="submit" class="submit">
+                + Register Patient
+            </button>
+        </form>
+    </div>
+
+    <!-- Patient List -->
+    <div class="card">
+        <h2>Registered Patients</h2>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Phone</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for patient in patients %}
+                    <tr>
+                        <td>{{ patient.id }}</td>
+                        <td>{{ patient.name }}</td>
+                        <td>
+                            {{ patient.age if patient.age is not none else '-' }}
+                        </td>
+                        <td>{{ patient.gender or '-' }}</td>
+                        <td>{{ patient.phone or '-' }}</td>
+
+                        <td>
+                            {% if patient.is_active %}
+                                <span class="status active">Active</span>
+                            {% else %}
+                                <span class="status inactive">Inactive</span>
+                            {% endif %}
+                        </td>
+
+                        
+<td>
+    <div class="actions">
+
+        {% if patient.is_active %}
+            <form method="POST"
+                  action="{{ url_for('deactivate_patient', patient_id=patient.id) }}"
+                  onsubmit="return confirm('Deactivate this patient? Their appointment and token history will be preserved.');">
+
+                <button type="submit" class="delete">
+                    Deactivate
+                </button>
+            </form>
+        {% else %}
+            <form method="POST"
+                  action="{{ url_for('activate_patient', patient_id=patient.id) }}"
+                  onsubmit="return confirm('Reactivate this patient?');">
+
+                <button type="submit" class="reactivate">
+                    Reactivate
+                </button>
+            </form>
+        {% endif %}
+
+        <form method="POST"
+              action="{{ url_for('delete_patient', patient_id=patient.id) }}"
+              onsubmit="return confirm('Permanently delete this patient? This will work only if no appointments or tokens are linked. This action cannot be undone.');">
+
+            <button type="submit" class="delete">
+                Delete
+            </button>
+        </form>
+
+    </div>
+</td>
+
+                    </tr>
+
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="empty">
+                            No patients registered yet.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
